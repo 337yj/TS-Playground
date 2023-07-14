@@ -127,15 +127,47 @@ console.log(speech); //Output: undefined
 // 일반적으로 함수의 리턴 타입으로 사용된다.
 // 함수의 리턴 타입으로 never가 사용될 경우, 항상 오류를 리턴하거나 리턴 값을 절대로 내보내지 않음을 의미한다.
 // 이는 무한 루프(loop)에 빠지는 것과 같다.
+
+// 강제로 에러내기 : 에러가 나면 전체 코드실행이 중단되니까
 function throwError(errorMsg: string): never {
   throw new Error(errorMsg);
 }
 
+// 무한 루프
 function keepProcessing(): never {
   while (true) {
     console.log("I always does something and never ends.");
   }
 }
+
+// 1. 무언가 return 하지 않고
+// 2. 끝나지도 않는 함수를 표현하고 싶을 때 never 타입을 지정하면 되는데
+// 2번 조건의 함수를 만들 일이 거의 없기 때문에 never 타입은 쓸 일이 없다.
+// 무언가를 return하고싶지 않을 경우 그냥 void 타입을 이용하시면 되며
+// 배우는 이유는 가끔 코드 이상하게 짜다보면 자동으로 등장하기 때문
+//* 파라미터가 never 타입이 되는 경우도 있음
+function func(parameter: string) {
+  if (typeof parameter === "string") {
+    parameter + 1;
+  } else {
+    parameter; // parameter: never
+  }
+}
+// 위 함수에서 narrowing을 이용 if-else문을 씀 => string이 아닐 경우~해달라고하는데 말이 안됨
+// 위 함수는 지금 파라미터가 string 밖에 못들어오니까 해줄 필요가 없는거임
+// 이런 잘못된 narrowing을 사용했을 때 파라미터의 타입이 never로 변한다.
+// 이런 경우에는 코드를 수정하는게 좋다 => 뭔가 잘못된 코드니까
+
+//* 자동으로 never 타입을 가지는 경우
+// 함수 선언문이 아무것도 return 하지 않고 끝나지도 않을 경우 void 타입이 자동으로 return 타입으로 할당
+function 함수선언식() {
+  throw new Error();
+}
+
+// 함수 표현식이 아무것도 return 하지 않고 끝나지도 않을 경우 never 타입이 자동으로 return 타입으로 할당
+let 함수표현식 = function () {
+  throw new Error();
+};
 
 // NOTE: void와 never의 차이
 // void 유형은 값으로 undefined 이나 null 값을 가질 수 있으며 never 는 어떠한 값도 가질 수 없다.

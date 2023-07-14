@@ -38,6 +38,7 @@ function homework(obj: { subject: string | string[] }): string {
 // 커스텀 타입을 narrowing하려면 in을 사용해야 한다.
 // 아래와 같이 커스텀 타입을 사용하는 경우 typeof를 쓸 수 없다.
 // typeof 연산자는 number, string, boolean, object등 기본 타입에만 사용 가능하다.
+// 서로 배타적인 속성을 가져와야 narrowing이 가능
 
 type Cat = { 야옹: string };
 type Dog = { 멍멍: string };
@@ -49,6 +50,7 @@ function 함수(animal: Cat | Dog) {
   // }
 
   // 정상 작동
+  // if (키값 in object자료형)
   if ("야옹" in animal) {
     animal.야옹;
   }
@@ -72,6 +74,15 @@ function myFunc2(a: string | undefined) {
   if (a && typeof a === "string") {
     console.log("a is string");
   }
+}
+
+// NOTE 5: if(변수 != null) => null, undefined 동시에 거를 수 있음
+
+// NOTE 6: class로부터 생산된 object라면 instanceof로 narrowing
+// new 키워드로 생산된 object 들은 instanceof 키워드를 붙여서 부모 클래스가 누군지 검사할 수 있다.
+let today = new Date();
+if (today instanceof Date) {
+  console.log("참이에요");
 }
 
 // SOLVE : Assertion

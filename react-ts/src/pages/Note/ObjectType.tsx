@@ -37,6 +37,57 @@ function hi(x?: string) {
   }
 }
 
+//* 함수 rest 파라미터, destructuring 할 때 타입지정
+// rest 파라미터: Spread 연산자(...)를 사용해 함수의 파라미터를 작성한 형태
+// 함수에 어떤 파라미터가 몇개 들어올지 미리 정의가 불가능한 경우 사용
+// rest 파라미터는 다른 일반 파라미터 뒤에만 올 수 있음, []에 담겨있음 => 타입지정 array로
+function add(...a: number[]) {
+  console.log(a);
+}
+
+add(1, 2, 3, 4, 5);
+
+//* Destructuring 문법도 함수 파라미터에 사용가능
+// 너무 길면 type 키워드 쓰는게 좋음
+let person = { student: true, age: 20 };
+
+function 함수({ student, age }: { student: boolean; age: number }) {
+  console.log(student, age);
+}
+함수({ student: true, age: 20 });
+
+//* 연습
+function maxNum(...x: number[]) {
+  let result = 0;
+  x.forEach((i) => {
+    if (result < i) {
+      result = i;
+    }
+  });
+  return result;
+}
+console.log(maxNum(4, 6, 3, 2));
+
+interface UserType {
+  user: string;
+  comment: number[];
+  admin: boolean;
+}
+
+function userInfo({ user, comment, admin }: UserType) {
+  console.log(user, comment, admin);
+}
+
+userInfo({ user: "kim", comment: [3, 5, 4], admin: false });
+
+type arr = (number | string | boolean)[];
+
+function myFunc([a, b, c]: arr) {
+  console.log(a, b, c);
+}
+
+myFunc([40, "wine", false]);
+
 // NOTE: array
 let users: string[] = ["kim", "lee", "park"];
 let users2: (string | number)[] = ["kim", 1, "lee", 2, 3, "park"];
@@ -129,8 +180,6 @@ let car1 = new Car("소나타", 3000);
 console.log(car1); // { model : '소나타', price : 3000 }
 console.log(car1.tax()); // 300
 
-
-um = 숫자들 array, this.str = 문자들 array 이렇게 해줬습니다. 
 class Word {
   num;
   str;
@@ -156,11 +205,10 @@ let obj = new Word("kim", 3, 5, "park");
 console.log(obj.num); //[3,5]
 console.log(obj.str); //['kim', 'park']
 
-// 1. class Word를 만들고 constructor를 만들었는데 
+// 1. class Word를 만들고 constructor를 만들었는데
 // 2. 그 안에는 rest parameter가 들어올 수 있다고 만들었다. 이제 new Word() 할 때 파라미터 많이 입력가능
 // 3. rest parameter는 array로 들어온다. 그걸 반복문 돌려서 하나하나 검사
 // 4. 파라미터 타입이 문자면 문자들 [] 에 추가, 숫자면 숫자들 [] 에 추가
-
 // 5. this.n
 
 export {};

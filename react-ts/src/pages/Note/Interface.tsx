@@ -39,7 +39,7 @@ interface Cat2 extends Animal {
 }
 
 // & 기호 쓰는걸 intersection이라고 부르는데 extends 와 유사하게 사용가능
-// 주의: extends 쓸 때 타입끼리 중복속성이 발견될 경우 에러가 발생하는데 & 쓰면 때에 따라 아닐 수도 있다.
+// ! 주의: extends 쓸 때 타입끼리 중복속성이 발견될 경우 에러가 발생하는데 & 쓰면 때에 따라 아닐 수도 있다.
 interface Student {
   name: string;
 }
@@ -75,13 +75,13 @@ type Animal4 = {
 interface Animal5 {
   name: string;
 }
-interface Dog5 extends Animal {
+interface Dog5 extends Animal5 {
   name: number; // error: Types of property 'name' are incompatible.
 }
 
 // & 연산자로 Dog, Animal을 합쳐도 에러남
 // type 키워드도 동일할게 에러남
-// 주의: name: string, name: number 라서 에러가 나는 것이지
+// ! 주의: name: string, name: number 라서 에러가 나는 것이지
 // 둘다  name: string 타입이면 에러나지 않고 하나로 합쳐줌
 interface Animal6 {
   name: string;
@@ -90,7 +90,7 @@ interface Dog6 {
   name: number;
 }
 
-let myPet: Dog6 & Animal = { name: "멍멍" }; // error: Type 'string' is not assignable to type 'never'.
+let myPet: Dog6 & Animal6 = { name: "멍멍" }; // error: Type 'string' is not assignable to type 'never'.
 
 // NOTE interface 연습
 interface Product {
@@ -134,5 +134,42 @@ let object: Funcs = {
     return a - b;
   },
 };
+
+// NOTE: class 타입을 확인하고 싶을 때 사용 근데 implements 키워드를 곁들인,,
+//* implements 키워드
+// class가 model, price 속성을 가지고 있는지 타입으로 확인하고 싶으면 ?
+// class 이름 우측에 implements를 쓰고 interface 이름을 쓰면
+// "이 class가 이 interface에 있는 속성을 다 들고있냐" 라고 확인 가능
+// 빠진 속성이 있으면 에러 발생
+interface CarType {
+  model: string;
+  price: number;
+}
+class Car implements CarType {
+  model: string;
+  // price : number = 1000; // error: Property 'price' is missing in type 'Car' but required in type 'CarType'.
+  constructor(a: string) {
+    this.model = a;
+  }
+}
+
+let myCar = new Car("morning");
+
+// ! 주의: implements는 타입지정문법이 아니다.
+// implements라는건 interface에 들어있는 속성을 가지고 있는지 확인만하라는 뜻
+// class에다가 타입을 할당하고 변형시키는 키워드가 아니다!
+interface CarType2 {
+  model: string;
+  tax: (price: number) => number;
+}
+
+class Car2 implements CarType2 {
+  model; ///any 타입됨
+  tax(a) {
+    ///a 파라미터는 any 타입됨
+    return a * 0.1;
+  }
+}
+// CarType에 있던 model : string 이런게 반영되는건 아니다.
 
 export {};
